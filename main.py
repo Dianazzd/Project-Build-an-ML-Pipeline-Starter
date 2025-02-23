@@ -13,6 +13,7 @@ _steps = [
     "data_check",
     "data_split",
     "train_random_forest",
+    "test_regression_model"
     # NOTE: We do not include this in the steps so it is not run by mistake.
     # You first need to promote a model export to "prod" before you can run this,
     # then you need to run this step explicitly
@@ -121,11 +122,15 @@ def go(config: DictConfig):
 
         if "test_regression_model" in active_steps:
 
-            ##################
-            # Implement here #
-            ##################
+            _ = mlflow.run(
+                f"{config['main']['components_repository']}/test_regression_model",
+                "main",
+                parameters={
+                    "mlflow_model": "random_forest_export:prod",
+                    "test_dataset": "test_data.csv:latest"
+                },
+            )
 
-            pass
 
 
 if __name__ == "__main__":
